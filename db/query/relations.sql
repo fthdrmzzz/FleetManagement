@@ -26,6 +26,10 @@ INSERT INTO package_vehicle (
 SELECT * FROM package_bag
 WHERE package_barcode = $1  LIMIT 1;
 
+-- name: ListPackagesInBag :many
+SELECT * FROM package_bag
+ORDER BY bag_barcode =$1 ;
+
 -- name: GetBagVehicle :one
 SELECT * FROM bag_vehicle
 WHERE bag_barcode = $1  LIMIT 1;

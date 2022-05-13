@@ -33,3 +33,16 @@ type addBagVehicleRequest struct {
 	VehiclePlate string `json:"vehicle_plate"`
 	BagBarcode   string `json:"bag_barcode"`
 }
+
+type makeDeliveryRequest struct {
+	Plate  string  `json:"plate"`
+	Routes []Route `json:"route"`
+}
+
+type Route struct {
+	DeliveryPoint int        `json:"deliveryPoint"`
+	Deliveries    []Delivery `json:"deliveries"`
+}
+type Delivery struct {
+	Barcode string `json:"barcode"`
+}
