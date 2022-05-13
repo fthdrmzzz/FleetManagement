@@ -39,15 +39,16 @@ CREATE TABLE "package_bag" (
   PRIMARY KEY ("bag_barcode", "package_barcode")
 );
 
-CREATE TABLE "vehicle_bag" (
-  "bag_barcode" varchar,
+CREATE TABLE "bag_vehicle" (
   "vehicle_plate" varchar,
+  "bag_barcode" varchar,
+
   PRIMARY KEY ("bag_barcode", "vehicle_plate")
 );
 
-CREATE TABLE "vehicle_package" (
-  "package_barcode" varchar,
+CREATE TABLE "package_vehicle" (
   "vehicle_plate" varchar,
+  "package_barcode" varchar,
   PRIMARY KEY ("package_barcode", "vehicle_plate")
 );
 
@@ -59,10 +60,10 @@ ALTER TABLE "package_bag" ADD FOREIGN KEY ("bag_barcode") REFERENCES "bags" ("ba
 
 ALTER TABLE "package_bag" ADD FOREIGN KEY ("package_barcode") REFERENCES "packages" ("barcode");
 
-ALTER TABLE "vehicle_bag" ADD FOREIGN KEY ("bag_barcode") REFERENCES "bags" ("barcode");
+ALTER TABLE "bag_vehicle" ADD FOREIGN KEY ("bag_barcode") REFERENCES "bags" ("barcode");
 
-ALTER TABLE "vehicle_bag" ADD FOREIGN KEY ("vehicle_plate") REFERENCES "vehicles" ("plate");
+ALTER TABLE "bag_vehicle" ADD FOREIGN KEY ("vehicle_plate") REFERENCES "vehicles" ("plate");
 
-ALTER TABLE "vehicle_package" ADD FOREIGN KEY ("package_barcode") REFERENCES "packages" ("barcode");
+ALTER TABLE "package_vehicle" ADD FOREIGN KEY ("package_barcode") REFERENCES "packages" ("barcode");
 
-ALTER TABLE "vehicle_package" ADD FOREIGN KEY ("vehicle_plate") REFERENCES "vehicles" ("plate");
+ALTER TABLE "package_vehicle" ADD FOREIGN KEY ("vehicle_plate") REFERENCES "vehicles" ("plate");

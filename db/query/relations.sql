@@ -7,7 +7,7 @@ INSERT INTO package_bag (
 ) RETURNING *;
 
 -- name: AddBagVehicle :one
-INSERT INTO vehicle_bag (
+INSERT INTO bag_vehicle (
     bag_barcode,
     vehicle_plate
 ) VALUES (
@@ -15,7 +15,7 @@ INSERT INTO vehicle_bag (
 ) RETURNING *;
 
 -- name: AddPackageVehicle :one
-INSERT INTO vehicle_package (
+INSERT INTO package_vehicle (
     package_barcode,
     vehicle_plate
 ) VALUES (
@@ -27,21 +27,21 @@ SELECT * FROM package_bag
 WHERE package_barcode = $1  LIMIT 1;
 
 -- name: GetBagVehicle :one
-SELECT * FROM vehicle_bag
+SELECT * FROM bag_vehicle
 WHERE bag_barcode = $1  LIMIT 1;
 
 -- name: GetPackageVehicle :one
-SELECT * FROM vehicle_package
+SELECT * FROM package_vehicle
 WHERE package_barcode = $1  LIMIT 1;
 
 -- name: DeletePackageBag :exec
 DELETE FROM package_bag WHERE package_barcode =$1;
 
 -- name: DeleteBagVehicle :exec
-DELETE FROM vehicle_bag WHERE bag_barcode =$1;
+DELETE FROM bag_vehicle WHERE bag_barcode =$1;
 
 -- name: DeletePackageVehicle :exec
-DELETE FROM vehicle_package WHERE package_barcode =$1;
+DELETE FROM package_vehicle WHERE package_barcode =$1;
 
 
 

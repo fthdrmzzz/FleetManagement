@@ -10,12 +10,12 @@ import (
 )
 
 const addBagVehicle = `-- name: AddBagVehicle :one
-INSERT INTO vehicle_bag (
+INSERT INTO bag_vehicle (
     bag_barcode,
     vehicle_plate
 ) VALUES (
     $1,$2
-) RETURNING bag_barcode, vehicle_plate
+) RETURNING vehicle_plate, bag_barcode
 `
 
 type AddBagVehicleParams struct {
@@ -23,10 +23,10 @@ type AddBagVehicleParams struct {
 	VehiclePlate string `json:"vehicle_plate"`
 }
 
-func (q *Queries) AddBagVehicle(ctx context.Context, arg AddBagVehicleParams) (VehicleBag, error) {
+func (q *Queries) AddBagVehicle(ctx context.Context, arg AddBagVehicleParams) (BagVehicle, error) {
 	row := q.db.QueryRowContext(ctx, addBagVehicle, arg.BagBarcode, arg.VehiclePlate)
-	var i VehicleBag
-	err := row.Scan(&i.BagBarcode, &i.VehiclePlate)
+	var i BagVehicle
+	err := row.Scan(&i.VehiclePlate, &i.BagBarcode)
 	return i, err
 }
 
@@ -52,12 +52,12 @@ func (q *Queries) AddPackageBag(ctx context.Context, arg AddPackageBagParams) (P
 }
 
 const addPackageVehicle = `-- name: AddPackageVehicle :one
-INSERT INTO vehicle_package (
+INSERT INTO package_vehicle (
     package_barcode,
     vehicle_plate
 ) VALUES (
     $1,$2
-) RETURNING package_barcode, vehicle_plate
+) RETURNING vehicle_plate, package_barcode
 `
 
 type AddPackageVehicleParams struct {
@@ -65,15 +65,15 @@ type AddPackageVehicleParams struct {
 	VehiclePlate   string `json:"vehicle_plate"`
 }
 
-func (q *Queries) AddPackageVehicle(ctx context.Context, arg AddPackageVehicleParams) (VehiclePackage, error) {
+func (q *Queries) AddPackageVehicle(ctx context.Context, arg AddPackageVehicleParams) (PackageVehicle, error) {
 	row := q.db.QueryRowContext(ctx, addPackageVehicle, arg.PackageBarcode, arg.VehiclePlate)
-	var i VehiclePackage
-	err := row.Scan(&i.PackageBarcode, &i.VehiclePlate)
+	var i PackageVehicle
+	err := row.Scan(&i.VehiclePlate, &i.PackageBarcode)
 	return i, err
 }
 
 const deleteBagVehicle = `-- name: DeleteBagVehicle :exec
-DELETE FROM vehicle_bag WHERE bag_barcode =$1
+DELETE FROM bag_vehicle WHERE bag_barcode =$1
 `
 
 func (q *Queries) DeleteBagVehicle(ctx context.Context, bagBarcode string) error {
@@ -91,7 +91,7 @@ func (q *Queries) DeletePackageBag(ctx context.Context, packageBarcode string) e
 }
 
 const deletePackageVehicle = `-- name: DeletePackageVehicle :exec
-DELETE FROM vehicle_package WHERE package_barcode =$1
+DELETE FROM package_vehicle WHERE package_barcode =$1
 `
 
 func (q *Queries) DeletePackageVehicle(ctx context.Context, packageBarcode string) error {
@@ -100,14 +100,14 @@ func (q *Queries) DeletePackageVehicle(ctx context.Context, packageBarcode strin
 }
 
 const getBagVehicle = `-- name: GetBagVehicle :one
-SELECT bag_barcode, vehicle_plate FROM vehicle_bag
+SELECT vehicle_plate, bag_barcode FROM bag_vehicle
 WHERE bag_barcode = $1  LIMIT 1
 `
 
-func (q *Queries) GetBagVehicle(ctx context.Context, bagBarcode string) (VehicleBag, error) {
+func (q *Queries) GetBagVehicle(ctx context.Context, bagBarcode string) (BagVehicle, error) {
 	row := q.db.QueryRowContext(ctx, getBagVehicle, bagBarcode)
-	var i VehicleBag
-	err := row.Scan(&i.BagBarcode, &i.VehiclePlate)
+	var i BagVehicle
+	err := row.Scan(&i.VehiclePlate, &i.BagBarcode)
 	return i, err
 }
 
@@ -124,13 +124,13 @@ func (q *Queries) GetPackageBag(ctx context.Context, packageBarcode string) (Pac
 }
 
 const getPackageVehicle = `-- name: GetPackageVehicle :one
-SELECT package_barcode, vehicle_plate FROM vehicle_package
+SELECT vehicle_plate, package_barcode FROM package_vehicle
 WHERE package_barcode = $1  LIMIT 1
 `
 
-func (q *Queries) GetPackageVehicle(ctx context.Context, packageBarcode string) (VehiclePackage, error) {
+func (q *Queries) GetPackageVehicle(ctx context.Context, packageBarcode string) (PackageVehicle, error) {
 	row := q.db.QueryRowContext(ctx, getPackageVehicle, packageBarcode)
-	var i VehiclePackage
-	err := row.Scan(&i.PackageBarcode, &i.VehiclePlate)
+	var i PackageVehicle
+	err := row.Scan(&i.VehiclePlate, &i.PackageBarcode)
 	return i, err
 }

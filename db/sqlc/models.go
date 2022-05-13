@@ -55,6 +55,11 @@ type Bag struct {
 	DeliveryID int32      `json:"delivery_id"`
 }
 
+type BagVehicle struct {
+	VehiclePlate string `json:"vehicle_plate"`
+	BagBarcode   string `json:"bag_barcode"`
+}
+
 type DeliveryPoint struct {
 	ID   int32  `json:"id"`
 	Name string `json:"name"`
@@ -72,16 +77,11 @@ type PackageBag struct {
 	PackageBarcode string `json:"package_barcode"`
 }
 
+type PackageVehicle struct {
+	VehiclePlate   string `json:"vehicle_plate"`
+	PackageBarcode string `json:"package_barcode"`
+}
+
 type Vehicle struct {
 	Plate string `json:"plate"`
-}
-
-type VehicleBag struct {
-	BagBarcode   string `json:"bag_barcode"`
-	VehiclePlate string `json:"vehicle_plate"`
-}
-
-type VehiclePackage struct {
-	PackageBarcode string `json:"package_barcode"`
-	VehiclePlate   string `json:"vehicle_plate"`
 }

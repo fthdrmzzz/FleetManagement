@@ -21,6 +21,10 @@ func NewServer(conn *sql.DB) *Server {
 	return server
 }
 
+func (server *Server) Start(address string) error {
+	return server.router.Run(address)
+}
+
 func (server *Server) setupRouter() {
 	router := gin.Default()
 
@@ -30,7 +34,7 @@ func (server *Server) setupRouter() {
 	router.POST("/packages", server.createPackages)
 
 	router.POST("/packagebag/", server.addPackageBag)
-	router.GET("/packagevehicle", server.addPackageVehicle)
+	router.POST("/packagevehicle", server.addPackageVehicle)
 	router.POST("/bagvehicle", server.addBagVehicle)
 
 	server.router = router
