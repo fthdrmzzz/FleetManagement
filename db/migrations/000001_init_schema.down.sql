@@ -1,0 +1,9 @@
+DROP TABLE IF EXISTS package_bag;
+DROP TABLE IF EXISTS vehicle_bag;
+DROP TABLE IF EXISTS vehicle_package;
+DROP TABLE IF EXISTS packages;
+DROP TABLE IF EXISTS bags;
+DROP TABLE IF EXISTS vehicles;
+DROP TABLE IF EXISTS "delivery_points";
+DROP TYPE IF EXISTS "bags_status";
+DROP TYPE IF EXISTS "packages_status";
