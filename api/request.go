@@ -28,3 +28,8 @@ type addPackageVehicleRequest struct {
 	VehiclePlate   string `json:"vehicle_plate"`
 	PackageBarcode string `json:"package_barcode"`
 }
+
+type addBagVehicleRequest struct {
+	VehiclePlate string `json:"vehicle_plate"`
+	BagBarcode   string `json:"bag_barcode"`
+}

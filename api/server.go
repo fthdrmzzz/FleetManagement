@@ -31,6 +31,7 @@ func (server *Server) setupRouter() {
 	router.POST("/vehicles", server.createVehicle)
 	router.POST("/deliverypoints", server.createDeliveryPoint)
 	router.POST("/bags", server.createBags)
+
 	router.POST("/packages", server.createPackages)
 
 	router.POST("/packagebag/", server.addPackageBag)
