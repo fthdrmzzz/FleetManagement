@@ -5,6 +5,7 @@ import (
 	"log"
 
 	"github.com/DevelopmentHiring/FatihDurmaz/api"
+	"github.com/DevelopmentHiring/FatihDurmaz/logger"
 	_ "github.com/lib/pq"
 )
 
@@ -15,11 +16,11 @@ const (
 )
 
 func main() {
+	l := logger.New()
 	conn, err := sql.Open(dbDriver, dbSource)
 	if err != nil {
 		log.Fatal("Could not connect to db:", err)
 	}
-
-	server := api.NewServer(conn)
+	server := api.NewServer(l, conn)
 	err = server.Start(serverAddress)
 }

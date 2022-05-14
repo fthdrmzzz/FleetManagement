@@ -1,6 +1,6 @@
+DROP TABLE IF EXISTS package_vehicle;
+DROP TABLE IF EXISTS bag_vehicle;
 DROP TABLE IF EXISTS package_bag;
-DROP TABLE IF EXISTS vehicle_bag;
-DROP TABLE IF EXISTS vehicle_package;
 DROP TABLE IF EXISTS packages;
 DROP TABLE IF EXISTS bags;
 DROP TABLE IF EXISTS vehicles;

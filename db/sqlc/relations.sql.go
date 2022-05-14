@@ -135,9 +135,36 @@ func (q *Queries) GetPackageVehicle(ctx context.Context, packageBarcode string) 
 	return i, err
 }
 
+const listPackageBag = `-- name: ListPackageBag :many
+SELECT bag_barcode, package_barcode FROM package_bag
+`
+
+func (q *Queries) ListPackageBag(ctx context.Context) ([]PackageBag, error) {
+	rows, err := q.db.QueryContext(ctx, listPackageBag)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []PackageBag
+	for rows.Next() {
+		var i PackageBag
+		if err := rows.Scan(&i.BagBarcode, &i.PackageBarcode); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const listPackagesInBag = `-- name: ListPackagesInBag :many
 SELECT bag_barcode, package_barcode FROM package_bag
-ORDER BY bag_barcode =$1
+WHERE bag_barcode =$1
 `
 
 func (q *Queries) ListPackagesInBag(ctx context.Context, bagBarcode string) ([]PackageBag, error) {

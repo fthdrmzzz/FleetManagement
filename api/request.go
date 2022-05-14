@@ -1,25 +1,26 @@
 package api
 
+import db "github.com/DevelopmentHiring/FatihDurmaz/db/sqlc"
+
 type createBagRequest struct {
-	Barcode    string `json:"barcode"`
-	DeliveryID int32  `json:"delivery_id"`
+	Bags []db.Bag `json:"bags"`
 }
 
-type createDeliveryPointRequest struct {
-	ID   int32  `json:"id"`
-	Name string `json:"name"`
+type createDeliveryPointsRequest struct {
+	DeliveryPoints []db.DeliveryPoint `json:"delivery_points"`
 }
 
 type createPackageRequest struct {
-	Barcode       string `json:"barcode"`
-	PackageWeight int32  `json:"package_weight"`
-	DeliveryID    int32  `json:"delivery_id"`
+	Packages []db.Package `json:"packages"`
 }
 type createVehicleRequest struct {
 	Plate string `json:"plate"`
 }
 
-type addPackageBagRequest struct {
+type addPackagesToBagRequest struct {
+	Assignments []assignment `json:"assignments"`
+}
+type assignment struct {
 	BagBarcode     string `json:"bag_barcode"`
 	PackageBarcode string `json:"package_barcode"`
 }

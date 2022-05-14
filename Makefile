@@ -14,4 +14,6 @@ test:
 	go test -v -cover	./...
 run:
 	go run cmd/main.go
+setupdb:
+	
 .PHONY: postgres createdb dropdb migrateup migratedown sqlc
