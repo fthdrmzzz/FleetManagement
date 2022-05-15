@@ -1,24 +1,33 @@
 version: "3.7"
 services:
-  database:
-    image: postgres
-    restart: always
-    env_file:
-      - .env
+  postgres:
+    image: "postgres:12-alpine"
     ports:
       - "5432:5432"
-    volumes:
-      - data:/var/lib/postgresql/data
-  server:
+    restart: unless-stopped
+    container_name: postgres_image 
+    networks: 
+      - trendyol-network
+    environment:
+      POSTGRES_USER: 'root'
+      POSTGRES_PASSWORD: 'postgres'
+      POSTGRES_DB: 'trendyol'
+
+  trendyol-challange:
+    image: trendyol_challenge
     build:
       context: .
       dockerfile: Dockerfile
-    env_file: .env
-    depends_on:
-      - database
-    networks:
-      - default
     ports:
-    - "8080:8080"
-volumes:
-  data:
+      - "8080:8080"
+    restart: unless-stopped
+    container_name: trendyol_challenge-container
+    networks:
+      - trendyol-network
+    depends_on:
+      - postgres
+    links:
+      - postgres
+networks: 
+      trendyol-network:
+  

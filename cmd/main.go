@@ -2,25 +2,57 @@ package main
 
 import (
 	"database/sql"
-	"log"
 
 	"github.com/DevelopmentHiring/FatihDurmaz/api"
 	"github.com/DevelopmentHiring/FatihDurmaz/logger"
+	"github.com/golang-migrate/migrate/v4"
+	_ "github.com/golang-migrate/migrate/v4/database/postgres"
+	_ "github.com/golang-migrate/migrate/v4/source/file"
 	_ "github.com/lib/pq"
 )
 
 const (
 	dbDriver      = "postgres"
-	dbSource      = "postgresql://root:postgres@localhost:5432/trendyol?sslmode=disable"
+	dbSource      = "postgresql://root:postgres@host.docker.internal:5432/trendyol?sslmode=disable"
 	serverAddress = "0.0.0.0:8080"
+	migrations    = "file://db/migrations"
 )
 
 func main() {
 	l := logger.New()
+	// make migrations
+	if err := setupDatabaseSchema(); err != nil {
+		l.Error.Fatal("Could not setup db:", err)
+	}
+	l.Info.Println("Database migrations are done")
+
+	// db connection
 	conn, err := sql.Open(dbDriver, dbSource)
 	if err != nil {
-		log.Fatal("Could not connect to db:", err)
+		l.Error.Fatal("Could not connect to db:", err)
 	}
+	l.Info.Println("Database connection is done")
+
+	// start server
 	server := api.NewServer(l, conn)
 	err = server.Start(serverAddress)
+	if err != nil {
+		l.Error.Fatal("Could not start server:", err)
+	}
+}
+
+func setupDatabaseSchema() error {
+	m, err := migrate.New(
+		migrations,
+		dbSource)
+	if err != nil {
+		return err
+	}
+	if err := m.Down(); err != nil {
+		return err
+	}
+	if err := m.Up(); err != nil {
+		return err
+	}
+	return nil
 }

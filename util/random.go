@@ -6,6 +6,7 @@ import (
 	"time"
 )
 
+// Random utilities for db testing
 const alphabet = "abcdefghijklmnopqrstuvwxyz"
 
 func init() {
