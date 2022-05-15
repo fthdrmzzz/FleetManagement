@@ -2,7 +2,11 @@
 test:
 	go test -v -cover	./...
 run:
-	docker-compose up 
+	docker-compose up -d
+stop:
+	docker-compose stop 
+down:
+	docker-compose down 
 setupdb:
 	python3 setup/data.py
 delivery:

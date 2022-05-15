@@ -20,20 +20,17 @@ const (
 
 func main() {
 	l := logger.New()
-	// make migrations
 	if err := setupDatabaseSchema(); err != nil {
 		l.Error.Fatal("Could not setup db:", err)
 	}
 	l.Info.Println("Database migrations are done")
 
-	// db connection
 	conn, err := sql.Open(dbDriver, dbSource)
 	if err != nil {
 		l.Error.Fatal("Could not connect to db:", err)
 	}
 	l.Info.Println("Database connection is done")
 
-	// start server
 	server := api.NewServer(l, conn)
 	err = server.Start(serverAddress)
 	if err != nil {
