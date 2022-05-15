@@ -20,17 +20,20 @@ const (
 
 func main() {
 	l := logger.New()
-	if err := setupDatabaseSchema(); err != nil {
+	// make migrations
+	if err := setupDatabaseSchema(l); err != nil {
 		l.Error.Fatal("Could not setup db:", err)
 	}
 	l.Info.Println("Database migrations are done")
 
+	// db connection
 	conn, err := sql.Open(dbDriver, dbSource)
 	if err != nil {
 		l.Error.Fatal("Could not connect to db:", err)
 	}
 	l.Info.Println("Database connection is done")
 
+	// start server
 	server := api.NewServer(l, conn)
 	err = server.Start(serverAddress)
 	if err != nil {
@@ -38,17 +41,22 @@ func main() {
 	}
 }
 
-func setupDatabaseSchema() error {
+func setupDatabaseSchema(l logger.Logging) error {
 	m, err := migrate.New(
 		migrations,
 		dbSource)
 	if err != nil {
+		l.Error.Printf("Error in creating migrate object %s", err.Error())
 		return err
 	}
 	if err := m.Down(); err != nil {
-		return err
+		l.Error.Printf("Error in migrate down %s", err.Error())
+		if err.Error() != "no change" {
+			return err
+		}
 	}
 	if err := m.Up(); err != nil {
+		l.Error.Printf("Error in migrate up %s", err.Error())
 		return err
 	}
 	return nil
